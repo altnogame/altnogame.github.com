@@ -9,12 +9,38 @@ html, body {
 	text-align: center;
 }
 
+#altNoImage {
+	height: 60px;
+	width: 60px;
+}
+
 canvas {
 	background: #eee;
 	display: block;
 	margin: 0 auto;
 }
 
+.scores {
+	display: table;
+	margin: auto;
+}
+
+.score_item {
+	display: table-cell;
+}
+
 img {
-	display: none;
+	margin: 5px;
+}
+
+.score_label {
+	text-align: center;
+}
+
+.bad {
+	color: red;
+}
+
+.good {
+	color: green;
 }
