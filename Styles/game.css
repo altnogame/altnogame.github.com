@@ -7,6 +7,12 @@ html, body {
 
 #hero {
 	text-align: center;
+	margin: 5px;
+}
+
+#altNoImage {
+	height: 60px;
+	width: 60px;
 }
 
 canvas {
@@ -15,6 +21,31 @@ canvas {
 	margin: 0 auto;
 }
 
+.scores {
+	display: table;
+	margin: auto;
+}
+
+.score_item {
+	display: table-cell;
+}
+
+.score_item > img {
+	height: 80px;
+}
+
 img {
-	display: none;
+	margin: 5px;
+}
+
+.score_label {
+	text-align: center;
+}
+
+.bad {
+	color: red;
+}
+
+.good {
+	color: green;
 }
