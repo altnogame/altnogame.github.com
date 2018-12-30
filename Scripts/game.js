@@ -24,6 +24,8 @@ var cashierImage = document.getElementById("cashier");
 
 var altNoImage = document.getElementById('altNoImage');
 
+var score = 0;
+
 // helpers
 function removeFromArray(item, array) {
 	array.splice(array.indexOf(item), 1);
@@ -39,7 +41,7 @@ function newCondom() {
 }
 
 function newOldLady() {
-	var oldLady = { score: -1, x: canvas.width, y: -100, image: oldLadyImage };
+	var oldLady = { score: -2, x: canvas.width, y: -100, image: oldLadyImage };
 	return oldLady;
 }
 
@@ -49,19 +51,22 @@ function newDeodorant() {
 }
 
 function newCashier() {
-	var cashier = { score: -2, x: canvas.width, y: -100, image: cashierImage };
+	var cashier = { score: -1, x: canvas.width, y: -100, image: cashierImage };
 	return cashier;
 }
 
 // drawing
-function draw(sprite) {
-	activeSprites.push(sprite)
+function drawScore() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Score: "+score, 8, 20);
 }
 
 function collisionDetection() {
 	for(var i = 0; i < activeSprites.length; i++) {
 		var sprite = activeSprites[i];
 		if (((sprite.x >= altNoMore_X && sprite.x <= altNoMore_X + altNoHeight) || (sprite.x + spriteWidth >= altNoMore_X && sprite.x + spriteWidth <= altNoMore_X + altNoHeight)) && ((sprite.y >= altNoMore_Y && sprite.y <= altNoMore_Y + altNoHeight) || (sprite.y + spriteWidth >= altNoMore_Y && sprite.y + spriteWidth <= altNoMore_Y + altNoHeight)))  {
+			score += sprite.score;
 			activeSprites.splice(i, 1)
 		}
 	}
@@ -139,6 +144,8 @@ function draw() {
 
 	ctx.drawImage(altNoImage, altNoMore_X, altNoMore_Y, altNoHeight, altNoHeight);
 	collisionDetection();
+	drawScore();
+
 	// again
 	requestAnimationFrame(draw);
 	c++;
