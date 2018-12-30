@@ -1,145 +1,181 @@
+// vars
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
-var ballRadius = 10;
-var x = canvas.width/2;
-var y = canvas.height-30;
-var dx = 2;
-var dy = -2;
-var paddleHeight = 10;
-var paddleWidth = 75;
-var paddleX = (canvas.width-paddleWidth)/2;
+
+var activeSprites = [];
+
+var dx = -5;
+var c = 0;
+
+var altNoMore_Y = canvas.height / 2;
+var altNoMore_X = canvas.width / 2;
+var alt_dx = dx * 1.5;
 var rightPressed = false;
 var leftPressed = false;
-var brickRowCount = 5;
-var brickColumnCount = 3;
-var brickWidth = 75;
-var brickHeight = 20;
-var brickPadding = 10;
-var brickOffsetTop = 30;
-var brickOffsetLeft = 30;
-var gameOverNotify = document.querySelector('.game-over-notify');
-var interval;
+var upPressed = false;
+var downPressed = false;
+var altNoHeight = 90;
+var spriteWidth = 80;
 
-var rate = 0;
+var condomImage = document.getElementById("condom");
+var oldLadyImage = document.getElementById("old_Lady");
+var deodorantImage = document.getElementById("deodorant");
+var cashierImage = document.getElementById("cashier");
 
-var bricks = [];
-for(var c=0; c<brickColumnCount; c++) {
-  bricks[c] = [];
-  for(var r=0; r<brickRowCount; r++) {
-    bricks[c][r] = { x: 0, y: 0, status: 1 };
-  }
+var altNoImage = document.getElementById('altNoImage');
+
+// helpers
+function removeFromArray(item, array) {
+	array.splice(array.indexOf(item), 1);
 }
 
-document.addEventListener("keydown", keyDownHandler, false);
-document.addEventListener("keyup", keyUpHandler, false);
+function randomIntFromInterval(min,max) {
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
 
-function keyDownHandler(e) {
-  if(e.keyCode == 39) {
-    rightPressed = true;
-  }
-  else if(e.keyCode == 37) {
-    leftPressed = true;
-  }
+function newCondom() {
+	var condom = { score: 3, x: canvas.width, y: -100, image: condomImage };
+	return condom;
 }
-function keyUpHandler(e) {
-  if(e.keyCode == 39) {
-    rightPressed = false;
-  }
-  else if(e.keyCode == 37) {
-    leftPressed = false;
-  }
+
+function newOldLady() {
+	var oldLady = { score: -1, x: canvas.width, y: -100, image: oldLadyImage };
+	return oldLady;
 }
+
+function newDeodorant() {
+	var deodorant = { score: 1, x: canvas.width, y: -100, image: deodorantImage };
+	return deodorant;
+}
+
+function newCashier() {
+	var cashier = { score: -2, x: canvas.width, y: -100, image: cashierImage };
+	return cashier;
+}
+
+// drawing
+function draw(sprite) {
+	activeSprites.push(sprite)
+}
+
 function collisionDetection() {
-  for(var c=0; c<brickColumnCount; c++) {
-    for(var r=0; r<brickRowCount; r++) {
-      var b = bricks[c][r];
-      if(b.status == 1) {
-        if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight) {
-          dy = -dy;
-          b.status = 0;
-        }
-      }
-    }
-  }
-}
-
-function drawBall() {
-  ctx.beginPath();
-  ctx.arc(x, y, ballRadius, 0, Math.PI*2);
-  ctx.fillStyle = "#0095DD";
-  ctx.fill();
-  ctx.closePath();
-}
-
-function drawPaddle() {
-  ctx.beginPath();
-  ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
-  ctx.fillStyle = "#0095DD";
-  ctx.fill();
-  ctx.closePath();
-}
-
-function drawBricks() {
-  for(var c=0; c<brickColumnCount; c++) {
-    for(var r=0; r<brickRowCount; r++) {
-      if(bricks[c][r].status == 1) {
-        var brickX = (r*(brickWidth+brickPadding))+brickOffsetLeft;
-        var brickY = (c*(brickHeight+brickPadding))+brickOffsetTop;
-        bricks[c][r].x = brickX;
-        bricks[c][r].y = brickY;
-        ctx.beginPath();
-        ctx.rect(brickX, brickY, brickWidth, brickHeight);
-        ctx.fillStyle = "#0095DD";
-        ctx.fill();
-        ctx.closePath();
-      }
-    }
-  }
+	for(var i = 0; i < activeSprites.length; i++) {
+		var sprite = activeSprites[i];
+		if (((sprite.x >= altNoMore_X && sprite.x <= altNoMore_X + altNoHeight) || (sprite.x + spriteWidth >= altNoMore_X && sprite.x + spriteWidth <= altNoMore_X + altNoHeight)) && ((sprite.y >= altNoMore_Y && sprite.y <= altNoMore_Y + altNoHeight) || (sprite.y + spriteWidth >= altNoMore_Y && sprite.y + spriteWidth <= altNoMore_Y + altNoHeight)))  {
+			activeSprites.splice(i, 1)
+		}
+	}
 }
 
 function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  drawBricks();
-  drawBall();
-  drawPaddle();
-  collisionDetection();
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
-    dx = -dx;
-  }
-  if(y + dy < ballRadius) {
-    dy = -dy;
-  }
-  else if(y + dy > canvas.height-ballRadius) {
-    if(x > paddleX && x < paddleX + paddleWidth) {
-      dy = -dy;
-    }
-    else {
-      alert('hi');
-      clearInterval(interval);
-      return;
-    }
-  }
+	// update
+	var num = randomIntFromInterval(1, 200)
+	var y = randomIntFromInterval(0, canvas.height)
 
-  if(rightPressed && paddleX < canvas.width-paddleWidth) {
-    paddleX += 7;
-  }
-  else if(leftPressed && paddleX > 0) {
-    paddleX -= 7;
-  }
+	if(num >= 1 && num <= 2) {
+		// cashier
+		var cashier = newCashier();
+		cashier.y = y
+		cashier.x = canvas.width;
+		activeSprites.push(cashier);
+	} else if(num >= 3 && num <= 4) {
+		// old lady
+		var lady = newOldLady();
+		lady.y = y
+		lady.x = canvas.width;
+		activeSprites.push(lady);
+	} else if(num >= 5 && num <= 7) {
+		// condom
+		var condom = newCondom();
+		condom.y = y
+		condom.x = canvas.width;
+		activeSprites.push(condom);
+	} else if(num >= 8 && num <= 10) {
+		// deo
+		var deo = newDeodorant();
+		deo.y = y
+		deo.x = canvas.width;
+		activeSprites.push(deo);
+	} 
 
-  x += dx;
-  y += dy;
+	// drawing
+	for(var i = 0; i < activeSprites.length; i++) {
+		var sprite = activeSprites[i];
+		sprite.x += dx;
+		var img = sprite.image;
 
-  // will call this function when the next frame is ready.
-  requestAnimationFrame(draw);
-  rate++;
+		ctx.drawImage(img, sprite.x, sprite.y);
 
+
+		if(sprite.x <= 0) {
+			removeFromArray(sprite, activeSprites)
+		}
+	}
+
+	if(upPressed) {
+		altNoMore_Y += alt_dx
+	} else if(downPressed) {
+		altNoMore_Y -= alt_dx
+	} else if(leftPressed) {
+		altNoMore_X += alt_dx
+	} else if (rightPressed) {
+		altNoMore_X -= alt_dx
+	}
+
+	if(altNoMore_Y < 0) {
+		altNoMore_Y = 0;
+	} 
+	if(altNoMore_Y >= canvas.height - altNoHeight) {
+		altNoMore_Y = canvas.height - altNoHeight;
+	} 
+	if(altNoMore_X < 0) {
+		altNoMore_X = 0;
+	} 
+	if (altNoMore_X >= canvas.width - altNoHeight) {
+		altNoMore_X = canvas.width - altNoHeight;
+	}
+
+	ctx.drawImage(altNoImage, altNoMore_X, altNoMore_Y, altNoHeight, altNoHeight);
+	collisionDetection();
+	// again
+	requestAnimationFrame(draw);
+	c++;
 }
+
+// key handlers
+function keyDownHandler(e) {
+	if(e.keyCode == 37) { 
+		leftPressed = true;
+	} else if(e.keyCode == 38) {
+		upPressed = true;
+	} else if(e.keyCode == 39) {
+		rightPressed = true;
+	} else if(e.keyCode == 40) {
+		downPressed = true;
+	}
+}
+
+function keyUpHandler(e) {
+	if(e.keyCode == 37) { 
+		leftPressed = false;
+	} else if(e.keyCode == 38) {
+		upPressed = false;
+	} else if(e.keyCode == 39) {
+		rightPressed = false;
+	} else if(e.keyCode == 40) {
+		downPressed = false;
+	}
+}
+
+// game
+document.addEventListener("keydown", keyDownHandler, false);
+document.addEventListener("keyup", keyUpHandler, false);
 
 draw();
 
 window.setInterval(function(){
-  console.log(rate.toString() + " fps");
-	rate = 0;
+  console.log(c.toString() + " fps");
+	c = 0;
 }, 1000);
