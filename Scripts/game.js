@@ -113,9 +113,8 @@ function draw() {
 
 		ctx.drawImage(img, sprite.x, sprite.y);
 
-
-		if(sprite.x <= 0) {
-			removeFromArray(sprite, activeSprites)
+		if(sprite.x <= -80) {
+			removeFromArray(sprite, activeSprites);
 		}
 	}
 
