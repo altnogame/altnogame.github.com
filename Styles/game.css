@@ -1,18 +1,25 @@
 html, body {
-	background-color: #FFC0CB;
+	background-color: #FFC0CB !important;
 
 	padding: 0;
 	margin: 0;
+
+	width: 100%;
 }
 
 #hero {
-	text-align: center;
-	margin: 5px;
+	max-width: 600px;
+	margin: 10px auto;
 }
 
-#altNoImage {
-	height: 60px;
-	width: 60px;
+.btn {
+	margin: auto;
+	width: 100%;
+	display: block;
+}
+
+#hero > h1 {
+	text-align: center;
 }
 
 canvas {
@@ -48,4 +55,19 @@ img {
 
 .good {
 	color: green;
+}
+
+.container, #game {
+	max-width: 100%;
+}
+
+noscript > p {
+	text-align: center;
+}
+
+footer {
+	text-align: center;
+	bottom: 0;
+	margin: 100px auto;
+	max-width: 600px;
 }
