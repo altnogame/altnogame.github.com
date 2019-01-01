@@ -35,12 +35,6 @@ canvas {
 	max-width: 100%;
 }
 
-.ad {
-	background-color: yellow;
-	height: 50%;
-	margin-top: 25%;
-}
-
 .div.row.justify-content-center {
 	margin: 0 !important;
 }
