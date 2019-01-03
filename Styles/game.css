@@ -1,7 +1,10 @@
 /*gen*/
 html, body {
-	background-color: #FFC0CB !important;
 	width: 100%;
+}
+
+body {
+	background-color: #FFC0CB !important;
 }
 
 html, body, .container-fluid, .row {

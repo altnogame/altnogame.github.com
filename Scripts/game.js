@@ -36,22 +36,22 @@ function randomIntFromInterval(min,max) {
 }
 
 function newCondom() {
-	var condom = { score: 3, x: canvas.width, y: -100, image: condomImage };
+	var condom = { score: 3, image: condomImage };
 	return condom;
 }
 
 function newOldLady() {
-	var oldLady = { score: -2, x: canvas.width, y: -100, image: oldLadyImage };
+	var oldLady = { score: -2, image: oldLadyImage };
 	return oldLady;
 }
 
 function newDeodorant() {
-	var deodorant = { score: 1, x: canvas.width, y: -100, image: deodorantImage };
+	var deodorant = { score: 1, image: deodorantImage };
 	return deodorant;
 }
 
 function newCashier() {
-	var cashier = { score: -1, x: canvas.width, y: -100, image: cashierImage };
+	var cashier = { score: -1, image: cashierImage };
 	return cashier;
 }
 
@@ -65,7 +65,10 @@ function drawScore() {
 function collisionDetection() {
 	for(var i = 0; i < activeSprites.length; i++) {
 		var sprite = activeSprites[i];
-		if (((sprite.x >= altNoMore_X && sprite.x <= altNoMore_X + altNoHeight) || (sprite.x + spriteWidth >= altNoMore_X && sprite.x + spriteWidth <= altNoMore_X + altNoHeight)) && ((sprite.y >= altNoMore_Y && sprite.y <= altNoMore_Y + altNoHeight) || (sprite.y + spriteWidth >= altNoMore_Y && sprite.y + spriteWidth <= altNoMore_Y + altNoHeight)))  {
+		if (((sprite.x >= altNoMore_X && sprite.x <= altNoMore_X + altNoHeight) ||
+		 (sprite.x + spriteWidth >= altNoMore_X && sprite.x + spriteWidth <= altNoMore_X + altNoHeight)) &&
+		  ((sprite.y >= altNoMore_Y && sprite.y <= altNoMore_Y + altNoHeight) || 
+		  	(sprite.y + spriteWidth >= altNoMore_Y && sprite.y + spriteWidth <= altNoMore_Y + altNoHeight)))  {
 			score += sprite.score;
 			activeSprites.splice(i, 1)
 		}
